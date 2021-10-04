@@ -1,0 +1,226 @@
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.Select;
+public class AutomationDriver {
+ public static void exerciseOne(WebDriver driver) throws InterruptedException
+ {
+	 //selecting radio button using css selector for radio1
+	 driver.findElement(By.cssSelector("input[value='radio1']")).click();
+	 Thread.sleep(500);
+	 if(driver.findElement(By.cssSelector("input[value='radio1']")).isSelected())
+		{
+		 //selecting radio2 if radio1 is selected
+		 driver.findElement(By.cssSelector("input[value*='radio2']")).click();
+		 Thread.sleep(500);
+		}
+	 
+	 if(driver.findElement(By.cssSelector("input[value*='radio2']")).isSelected())
+	 	{
+		 //selecting radio3 if radio2 is selected
+		 driver.findElement(By.cssSelector("input[value*='radio3']")).click();
+		 Thread.sleep(500);
+	 	}
+	 
+	 //this method gives output where all three radio button are selected one by one 
+	 
+ }
+ public static void exerciseTwo(WebDriver driver) throws InterruptedException
+ {
+	 	//sending united states text  in select countries input field through sendkeys
+	    driver.findElement(By.id("autocomplete")).sendKeys("United States");
+	    Thread.sleep(1000);
+	    
+	    //WebElement is used to save the similar countries having unites states in its menu
+		List<WebElement> countries=driver.findElements(By.cssSelector("li[class='ui-menu-item'] div"));
+		for(WebElement menu : countries)
+		{
+			//checking if the menu is equal to united states minor outlying islanda
+			if (menu.getText().equalsIgnoreCase("United States Minor Outlying Islands"))
+				{
+					menu.click();
+				    break;
+				}
+        }
+		
+		//this method gives output where united states is sent in input field  and united states minor outlying islands is selected 
+ }
+ public static void exerciseThree(WebDriver driver) throws InterruptedException
+ {
+	 	WebElement staticDropDown =driver.findElement(By.id("dropdown-class-example"));
+	 	
+	 	//accessing index to select the options
+		Select dropdown=new Select(staticDropDown);
+		dropdown.selectByIndex(1);
+		Thread.sleep(1000);
+		dropdown.selectByIndex(2);
+		Thread.sleep(1000);
+		dropdown.selectByIndex(3);
+		Thread.sleep(500);
+		
+		//this method gives output where all the options are selected one by one
+ }
+ public static void exerciseFour(WebDriver driver) throws InterruptedException
+ {
+	    driver.findElement(By.name("checkBoxOption1")).click();
+		Thread.sleep(1000);
+		driver.findElement(By.name("checkBoxOption1")).click();
+		
+		driver.findElement(By.name("checkBoxOption2")).click();
+		Thread.sleep(1000);
+		driver.findElement(By.name("checkBoxOption2")).click();
+		
+		driver.findElement(By.name("checkBoxOption3")).click();
+		Thread.sleep(1000);
+		driver.findElement(By.name("checkBoxOption3")).click();
+		
+		//this method gives output where each check boxes are checked on and checked off
+ }
+ public static void exerciseFourPointOne(WebDriver driver) throws InterruptedException
+ {
+	    driver.findElement(By.name("checkBoxOption1")).click();
+		Thread.sleep(1000);
+		
+		driver.findElement(By.name("checkBoxOption2")).click();
+		Thread.sleep(1000);
+		
+		driver.findElement(By.name("checkBoxOption3")).click();
+		Thread.sleep(1000);	
+		
+		//this method gives output where all check boxes are checked on
+ }
+ public static void exerciseFourPointTwo(WebDriver driver) throws InterruptedException
+ {
+	    driver.findElement(By.name("checkBoxOption1")).click();
+		Thread.sleep(1000);
+		
+		driver.findElement(By.name("checkBoxOption2")).click();
+		Thread.sleep(1000);
+		
+		driver.findElement(By.name("checkBoxOption3")).click();
+		Thread.sleep(1000);	
+		
+		//this method gives output where all check boxes are checked off
+ }
+ public static void exerciseFive(WebDriver driver) throws InterruptedException
+ {
+	    //implicit wait to wait for few second to open a new window
+	 	driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+		driver.manage().window().maximize();
+		
+		driver.findElement(By.id("openwindow")).click();
+		Set<String> Windows = driver.getWindowHandles();
+		
+		//going to new window  through iterator
+		Iterator<String> it = Windows.iterator();
+		String parentid = it.next();
+		Thread.sleep(5000);
+		
+		//coming back to the original page(parentid)
+		driver.switchTo().window(parentid);
+		
+		//this method gives output where a new window is opened and waits for few seconds and comes back to original page
+ }
+ public static void exerciseSix(WebDriver driver) throws InterruptedException
+ {
+	   //opening and closing new tab using iterator
+	    driver.findElement(By.id("opentab")).click();
+		Thread.sleep(2000);
+		Set<String> window = driver.getWindowHandles();
+		Iterator<String> it = window.iterator();
+		String parent = it.next();
+		it.next();
+		String child = it.next();
+		Thread.sleep(4000);
+		driver.switchTo().window(child);
+		driver.close();
+		driver.switchTo().window(parent);
+		
+		//this method gives output where a new tab is opened and waits for few seconds and closes the new tab comes back to original page
+
+ }
+ public static void exerciseSeven(WebDriver driver) throws InterruptedException 
+ {
+	 	//sending name through send keys
+		driver.findElement(By.id("name")).sendKeys("John");
+		Thread.sleep(1500);
+		
+		//displaying alert message with given name that is john
+		driver.findElement(By.id("alertbtn")).click();
+		Thread.sleep(1500);
+		driver.switchTo().alert().accept();
+		
+		//this method gives output where the name is sent in name field and alert message is displayed
+		
+}
+ public static void exerciseEight(WebDriver driver) throws InterruptedException 
+ {
+	    //using java script executor to scroll the page below
+	    JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("window.scrollBy(0,680)");
+		Thread.sleep(3000);
+		
+		//verifying the table contains all the rows in it 
+		List<WebElement> values = driver.findElements(By.name("courses"));
+		for(int i=0;i<values.size();i++)
+		{
+			if(values.get(i)!=null)//if the rows is having the values it will print the values 
+			{
+				System.out.println("The table has all the elements which are displayed below ");
+				System.out.println(values.get(i).getText());
+			}
+			else //if the rows are empty prints that values are empty and the empty field are displayed
+			{
+				System.out.println("These field values are empty");
+				System.out.println(values.get(i).getText());
+			}
+		}
+		
+		//this method giver output where page is scolled below and check id table contains all vales and prints them in console
+ }
+ public static void exerciseNine(WebDriver driver) throws InterruptedException 
+{
+	 	//using java script executor to scroll little more below so that the mouse over is visible
+	 	JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("window.scrollBy(0,400)");
+		Thread.sleep(2000);
+		
+		//moving cursor on mouse over and selecting top
+		Actions act = new Actions(driver);
+		Thread.sleep(3000);
+		act.moveToElement(driver.findElement(By.cssSelector("[id='mousehover']"))).click().build().perform();
+		Thread.sleep(4000);
+		act.moveToElement(driver.findElement(By.cssSelector("[href='#top']"))).click().build().perform();
+		
+		//this method gives output where the cursor is moved on mouse over and top is selected and the page is scrolled up as top was selected
+}
+ public static void main(String[] args) throws InterruptedException
+ {	 
+		// main method where all other methods are called 
+	 
+		System.setProperty("webdriver.chrome.driver", "C:\\Users\\91911\\Downloads\\chromedriver_win32\\chromedriver.exe");
+		WebDriver driver = new ChromeDriver();
+		driver.get("https://rahulshettyacademy.com/AutomationPractice/");
+		
+		AutomationDriver.exerciseOne(driver);
+		AutomationDriver.exerciseTwo(driver);
+		AutomationDriver.exerciseThree(driver);
+		AutomationDriver.exerciseFour(driver);
+		AutomationDriver.exerciseFourPointOne(driver);
+		AutomationDriver.exerciseFourPointTwo(driver);
+		AutomationDriver.exerciseFive(driver);
+		AutomationDriver.exerciseSix(driver);
+		AutomationDriver.exerciseSeven(driver);
+		AutomationDriver.exerciseEight(driver);
+		AutomationDriver.exerciseNine(driver);
+
+}
+
+}
